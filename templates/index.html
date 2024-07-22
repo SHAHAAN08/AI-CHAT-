@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT Clone</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0d1117; /* Dark background color */
+            color: #c9d1d9; /* Light text color for readability */
+            margin: 0;
+            padding: 0;
+        }
+        .chat-container {
+            width: 100%;
+            max-width: 1300px;
+            margin: auto;
+            padding: 20px;
+            box-sizing: border-box;
+            height: 80vh;
+            overflow-y: scroll;
+            background-color: #161b22; /* Dark gray background */
+            border: 1px solid #30363d; /* Dark border */
+            border-radius: 8px;
+        }
+        .chat-message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+            clear: both;
+            overflow-wrap: break-word;
+            max-width: 80%;
+        }
+        .user-message {
+            float: right;
+            background-color: black; /* Dark green for user messages */
+            color: #e9ecef;
+        }
+        .model-message {
+            float: left;
+            background-color: green; /* Slightly lighter dark gray */
+            color: #e9ecef;
+        }
+        .input-form {
+            width: 100%;
+            margin-top: 20px;
+            box-sizing: border-box;
+            position: fixed;
+            bottom: 0;
+            background-color: #161b22; /* Same dark gray as chat container */
+            padding: 10px;
+            border-top: 1px solid #30363d; /* Dark border */
+        }
+        .input-form input[type="text"] {
+            width: calc(100% - 70px);
+            padding: 10px;
+            border: 1px solid #30363d; /* Dark border for input */
+            background-color: #0d1117; /* Dark background for input */
+            color: #c9d1d9; /* Light text color */
+            border-radius: 5px 0 0 5px;
+        }
+        .input-form button {
+            width: 70px;
+            padding: 10px;
+            background-color: #58a6ff; /* Light blue color for button */
+            color: #ffffff; /* White text color */
+            border: none;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+        .input-form button:hover {
+            background-color: #1f6feb; /* Darker blue on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container" id="chat-container">
+        {% for entry in history %}
+            <div class="chat-message {{ entry.role }}-message">
+                {{ entry.parts[0] }}
+            </div>
+        {% endfor %}
+    </div>
+    <form class="input-form" action="{{ url_for('chat') }}" method="post" id="input-form">
+        <input type="text" name="user_input" id="user_input" placeholder="Type your message...">
+        <button type="submit">Send</button>
+    </form>
+    <script>
+        var chatContainer = document.getElementById('chat-container');
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+
+        document.getElementById('user_input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('input-form').submit();
+            }
+        });
+    </script>
+</body>
+</html>
